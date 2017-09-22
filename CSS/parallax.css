@@ -1,0 +1,30 @@
+body, html {
+    height: 100%;
+}
+
+/* Create a Parallax Effect */
+.bgimg-1, .bgimg-2, .bgimg-contact {
+    opacity: 0.7;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* First image (Logo. Full height) */
+.bgimg-1 {
+    background-image: url('../img/background-1.jpg');
+    min-height: 100%;
+}
+
+/* Flappy bird */
+.bgimg-2 {
+    background-image: url("../img/background-2.jpg");
+    min-height: 300px;
+}
+
+/* Contact*/
+.bgimg-contact {
+    background-image: url("../img/background-contact.jpg");
+    min-height: 300px;
+}

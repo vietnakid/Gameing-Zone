@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+
+	<title>FlappyJS</title>
+
+	<script src="sprite.js"></script>
+
+	<style>
+	canvas {
+		display: block;
+		position: absolute;
+		margin: auto;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border: 1px solid black;
+		
+	}
+	</style>
+</head >
+<body onkeydown="onpress(event)">
+<canvas id = "myCanvas" width = "320" height = "480" onclick="onpress(event)">	</canvas>
+<script>
+var
+
+canvas,
+ctx,
+height,
+width
+
+frames = 0,
+score = 0,
+best = 0,
+
+
+currentState = 0,
+states = {
+	Splash: 0, Game: 1, Score: 2
+},
+
+bird = {
+	x: 50,
+	y: 0,
+	frame: 0,
+	animation: [0, 1, 2, 1],
+	rotation: 0,
+	velocity: 0,
+	gravity: 0.25,
+	_jump: 4.6,
+	radius: 12,
+	
+	jump: function() {
+		this.velocity = -this._jump;
+	},
+	
+	update: function() {
+		var n = currentState === states.Splash ? 10 : 5;
+		this.frame += frames % n == 0 ? 1 : 0; //vào game bay chậm, vào trận bay nhanh
+		this.frame %= this.animation.length;
+		
+		if (currentState === states.Splash) { //vào game, bay lên, bay xuống
+			this.y = 180 + 7*Math.cos(frames/10);
+			this.rotation = 0;
+		}
+		else {
+			if(currentState === states.Game){
+				this.velocity += this.gravity;
+				if (this.y + this.velocity >= 0) //Không cho bay quá cao
+					this.y += this.velocity;
+			}
+			if (this.y >= height - s_fg.height - 10){ //die
+				this.y = height - s_fg.height - 10;
+				currentState = states.Score;
+			}
+			
+			if (this.velocity >= 0)
+				this.rotation = Math.min(Math.PI/2, this.rotation + 0.3);
+			else
+				this.rotation = -0.3;
+				
+		}
+		if (currentState === states.Score) {
+			this.frame = 1;
+			this.velocity += this.gravity;
+			if (this.y < height - s_fg.height - 10)
+				this.y += this.velocity;
+			if (this.y >= height - s_fg.height - 10)
+				this.y = height - s_fg.height - 10;
+		}
+		
+	},
+	
+	draw: function(ctx) {
+		ctx.save();
+		/*Vì Rotation bird nên phải làm như này, nếu không thì bị lỗi */
+		ctx.translate(this.x, this.y);
+		ctx.rotate(this.rotation);
+		var n = this.animation[this.frame];
+		s_bird[n].draw(ctx, -s_bird[n].width/2, -s_bird[n].height/2);
+		ctx.restore();
+	}
+},
+
+pipes = {
+	_pipes: [],
+	
+	reset: function() {
+		this._pipes = [];
+	},
+	
+	update: function() {
+		if (frames % 100 == 0) {
+			var _y = height - s_fg.height - s_pipeNorth.height + 200 + 150*Math.random(); //Cot duoi
+			this._pipes.push({
+				x: 500,
+				y: _y
+			});
+		}
+		for (var i = 0, len = this._pipes.length; i < len; i++){
+			var p = this._pipes[i];
+			if (p.x + s_pipeNorth.width == bird.x) score++;
+			if (score > best) best = score;
+			if (p.x - bird.radius <= bird.x && p.x + bird.radius + s_pipeNorth.width >= bird.x ) // Bird ở trong khoảng Pipies
+				if (!(bird.y + 10 <= p.y  && bird.y >= p.y - 72))
+					currentState = states.Score;
+			p.x -= 2;
+			
+			if (p.x < -50){
+				this._pipes.splice(i, 1);
+				i--;
+				len--;
+			}
+		}
+	},
+	
+	draw: function(ctx) {
+		for (var i = 0, len = this._pipes.length; i < len; i++){
+			var p = this._pipes[i];
+			s_pipeNorth.draw(ctx, p.x, p.y);
+			s_pipeSouth.draw(ctx, p.x, p.y - s_pipeSouth.height - 80);
+		}
+	}
+	
+},
+/*move foreground*/
+fgpos = 0,
+
+// ok button
+okbt = {};
+
+
+function onpress(event) {
+	switch (currentState) {
+		case states.Splash:
+			currentState = states.Game;
+			bird.jump();
+			break;
+		case states.Game:
+			bird.jump();
+			break;
+		case states.Score:
+			var 
+				mx = event.offsetX; 
+				my = event.offsetY;
+				keynum = event.keyCode;
+				//console.log(keynum); // Enter = 13
+			if ((mx >= okbt.x && mx <= okbt.x + okbt.width && my >= okbt.y && my <= okbt.y + okbt.height) || keynum == 13) {
+				pipes.reset();
+				currentState = states.Splash;
+				score = 0;
+			}
+			break;
+	}
+}
+
+
+function main() {
+	width = 320;
+	height = 480;
+	canvas = document.getElementById("myCanvas");
+	ctx = canvas.getContext("2d");
+	
+	currentState = states.Splash;
+	
+	var img = new Image();
+	img.onload = function() {
+		initSprites(this);
+		okbt = {
+			x: width/2 - s_buttons.Ok.width/2,
+			y: 270,
+			width: s_buttons.Ok.width,
+			height: s_buttons.Ok.height
+		};
+		run();
+	};
+	img.src = "img/sheet.png";
+}
+
+function run() {
+	var loop = function() {
+		update();
+		render();
+		window.requestAnimationFrame(loop, canvas);
+	}
+	window.requestAnimationFrame(loop, canvas);
+}
+
+function update() {
+	frames++;
+	if (currentState !== states.Score) {
+		fgpos = (fgpos-2) % 14;
+	}
+	bird.update();
+	if (currentState === states.Game) {
+		pipes.update();
+	}
+}
+
+function render() {
+	/*Draw sky*/
+	ctx.fillStyle = s_bg.color;
+	ctx.fillRect(0,0,width, height);
+	/*Draw background*/
+	
+    s_bg.draw(ctx, 0, height - s_bg.height);
+	s_bg.draw(ctx, s_bg.width, height - s_bg.height);
+	
+	/*Draw pipes*/
+	pipes.draw(ctx); // phai vẽ trước vì pipes dài quá
+	
+	/*Draw foreground*/
+	s_fg.draw(ctx, fgpos, height - s_fg.height);
+	s_fg.draw(ctx, fgpos+s_fg.width, height - s_fg.height);
+	
+	/*Draw bird*/
+	bird.draw(ctx);
+	
+	/*Draw Splash*/
+	if (currentState === states.Splash) {
+		s_splash.draw(ctx, (width/2)-(s_splash.width/2),180);
+		s_text.GetReady.draw(ctx, (width/2)-(s_text.GetReady.width/2),100);
+	}
+	
+	/*Draw score*/
+	var posscore = (score.toString()).length*(s_numberB.width + 2);
+	s_numberB.draw(ctx, (width/2) - posscore/2, 20, score);
+	
+	
+	if (currentState === states.Score) {
+		s_text.GameOver.draw(ctx, (width/2)-(s_text.GameOver.width/2), 80);
+		s_score.draw(ctx, (width/2)-(s_score.width/2),140);
+		s_buttons.Ok.draw(ctx, okbt.x, okbt.y);
+		s_numberS.draw(ctx, 240, 175, score);
+		s_numberS.draw(ctx, 240, 220, best);
+	}
+}
+
+main();
+</script>
+</body>
+</html>

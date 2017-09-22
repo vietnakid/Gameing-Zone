@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Việt's website Gaming</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="./CSS/w3.css">
+<link rel="stylesheet" href="./CSS/parallax.css">
+<link rel="stylesheet" href="./CSS/myStyle.css">
+
+<!--Chèn icon-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<!--font-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Allerta+Stencil">
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+
+<!--My script-->
+<script src="./script/scroll-page.js"></script>
+<script src="./script/gamewindow.js"></script>
+<script src="./script/googlemaps.js"></script>
+<script src="./script/myScript.js"></script>
+
+
+<style>
+
+</style>
+
+</head>
+<body>
+
+<!--Navbar - sit on top-->
+<div class = "w3-top">
+	<ul class = "w3-navbar w3-text-white" id = "myNavbar">
+		<li><a href = "#home" id="ahome" class = "w3-padding-large li-myStyle"><i class="fa fa-home"></i> HOME</a></li>
+		<li><a href = "#flappy" id="aflappy" class = "w3-padding-large li-myStyle"><i class="fa fa-twitter"></i> FLAPPY BIRD</a></li>
+		<li><a href = "#contact" id="acontact" class = "w3-padding-large li-myStyle"><i class="fa fa-phone"></i> CONTACT</a></li>
+		<span id = "searchOn" style="display:none">
+		<li class = "w3-right" style="position:absolute;right:80px">
+		<input class = "w3-padding-large" type="text" id="search" onfocusout="hideSearch()" placeholder="Search for games.."></li>
+		</span>
+		<li class = "w3-right"><a class = "w3-padding-large  li-myStyle" onclick="showsSearch()"><i class="fa fa-search"></i></a></li>
+	</ul>
+</div>
+
+
+<!--Background 1 - 100% height-->
+<div class="bgimg-1 w3-opacity w3-display-container" id="home">
+  <div class="w3-display-middle" style="white-space:nowrap;">
+    <span class="w3-center w3-padding-xlarge w3-black w3-xlarge w3-wide w3-animate-opacity li-myStyle">Gaming Zone</span>
+  </div>
+</div>
+
+<!--About Game-->
+<div class="w3-content w3-container w3-padding-64">
+	<h3 class="w3-center"><span class="w3-bottombar li-myStyle">About author</span></h3>
+	<p class="w3-center"><em>Enjoy Việt's game and Get High bro</em></p>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean leo tellus, tincidunt ac porttitor in, molestie vel augue. Praesent vel erat in turpis elementum placerat. Fusce iaculis egestas elit. Mauris laoreet varius nibh, et rutrum augue ornare eget. Fusce non congue felis. Vivamus imperdiet suscipit purus, sed ultricies leo sodales a. Nunc rhoncus tincidunt arcu imperdiet interdum. Vestibulum tempus, lacus in maximus condimentum, diam ipsum sagittis arcu, vel tincidunt eros nibh non odio. Donec semper magna mattis, aliquet dolor vitae, scelerisque sapien. Integer consectetur elementum ligula.</p>
+	<div class="w3-row">
+		<div class="w3-col m6 w3-center w3-section">
+			<p><b>Annonymous</b></p><br>
+			<img src="./img/vietdeptrai.jpg" class="w3-circle" alt="Photo of Me" height = "200px" width = "200px">
+		</div>
+		<div class="w3-col m6 w3-section">
+			<p>Ut in dolor ac urna tristique tempor sed et odio. Aenean et hendrerit eros. Nam et magna felis. Aliquam tincidunt, neque et viverra finibus, quam risus hendrerit ex, eget interdum ex felis venenatis ante. Integer eros eros, tristique vitae tortor eget, gravida cursus nisi. Ut faucibus ex ut turpis egestas, ut dapibus libero venenatis. Praesent sed dignissim nibh, pharetra sagittis lorem. In porttitor sem ac lacus consectetur, vel faucibus nisl efficitur. Sed elementum nunc metus, at imperdiet nisi pretium quis. Fusce ut vulputate risus, vitae blandit dui. Praesent fermentum accumsan molestie. Nullam mollis enim nec egestas facilisis. Aliquam a lorem sed tellus pharetra imperdiet.</p>
+		</div>
+	</div>
+</div>
+
+<!--Background 2 - Flappy bird>-->
+<div class="bgimg-2 w3-display-container" id = "flappy">
+  <div class="w3-display-middle">
+    <span class="w3-xxxlarge w3-text-light-grey w3-wide centertext">FLAPPY BIRD</span>
+  </div>
+</div>
+
+<!--Flappy bird-->
+<div class="w3-content w3-container w3-padding-64">
+	<h3 class="w3-center"><span class="w3-bottombar li-myStyle">FLAPPY BIRD</span></h3>
+	<p class="w3-center"><em>Flappy Bird is a 2013 mobile game developed by Vietnamese artist and programmer Dong Nguyen, under his game development company dotGEARS</em></p>
+	<p>Ut a maximus ligula, sed iaculis enim. Curabitur blandit pellentesque arcu, id posuere elit imperdiet eu. Sed volutpat finibus ante sit amet pretium. Morbi ipsum diam, luctus eget lobortis sit amet, maximus vel ante. Suspendisse fermentum accumsan nibh, non ultrices neque tempus vel. Pellentesque lacinia lacus ut est vehicula rhoncus. Ut erat ipsum, bibendum vel augue a, varius scelerisque ipsum. Aenean egestas diam consequat molestie semper.</p>
+	<div class = "w3-center"><button class="button" onclick="playFlappy()"><span>Play Flappy Bird</span></button></div>
+</div>
+
+<!-- Flappy Bird Window-->
+<div id="playFlappyModal" class="w3-modal w3-black">
+	<div class="w3-modal-content w3-animate-zoom w3-center w3-transparent" style = "position:absolute;top:40px;width:100%;">
+	<iframe src="./flappyBird/index.html" width = "340" height = "490"></iframe>
+	</div>
+	<span class="w3-closebtn w3-hover-red w3-text-white w3-xxxlarge w3-container w3-display-topright" onclick = "closeFlappy()">×</span>
+	
+</div>
+
+
+<!--Background contact>-->
+<div class="bgimg-contact w3-display-container" id ="contact">
+  <div class="w3-display-middle">
+    <span class="w3-xxxlarge w3-text-light-grey w3-wide centertext">CONTACT</span>
+  </div>
+</div>
+
+
+<!-- Container (Contact Section) -->
+<div class="w3-content w3-container w3-padding-64">
+  <h3 class="w3-center"><span class="w3-bottombar li-myStyle">WHERE I WORK</span></h3>
+  <p class="w3-center"><em>I'd love your feedback!</em></p>
+
+  <div class="w3-row w3-padding-32 w3-section">
+    <div class="w3-col m4 w3-container">
+      <!-- Add Google Maps -->
+      <div id="googleMap" class="w3-round-large"></div>
+	  </div>
+    <div class="w3-col m8 w3-container w3-section">
+      <div class="w3-large w3-margin-bottom">
+        <i class="fa fa-map-marker w3-hover-text-red" style="width:30px"></i> FPT University, Ha Noi, Viet Nam<br>
+        <i class="fa fa-phone w3-hover-text-red" style="width:30px"></i> Phone: +84 165 876 2834<br>
+        <i class="fa fa-envelope w3-hover-text-red" style="width:30px"> </i> Email: anhvietdl@gmail.com<br>
+      </div>
+      <p>Swing by for a cup of coffee, or leave me a note:</p>
+      <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
+        <div class="w3-half">
+          <input class="w3-input w3-border w3-hover-light-grey" type="text" placeholder="Name">
+        </div>
+        <div class="w3-half">
+          <input class="w3-input w3-border w3-hover-light-grey" type="text" placeholder="Email">
+        </div>
+      </div>
+      <input class="w3-input w3-border w3-hover-light-grey" type="text" placeholder="Comment">
+      <button class="w3-btn w3-section w3-right">SEND</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Footer -->
+<footer class="w3-center w3-dark-grey w3-padding-48 w3-hover-black">
+  <p>@Powered by <a href="http://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-opacity">w3.css</a></p>
+  <p>@reDesign by <a href="#home"" class="w3-hover-opacity">Việt</a></p>
+</footer>
+
+</body>
+</html>
